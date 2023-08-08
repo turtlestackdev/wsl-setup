@@ -13,16 +13,6 @@
 
 - name: Push OpenSSH socket unit file
   template: src=sshd-socket-override.conf.j2 dest=/etc/systemd/system/sshd.socket.d/override.conf
-  notify:
-    - restart sshd
-
-- name: Enable and start OpenSSH
-  service: name=ssh enabled=yes state=started
-  when: ssh.enable_sshd is defined and ssh.enable_sshd == True
-
-- name: Disable and stop OpenSSH
-  service: name=sshd.service enabled=no state=stopped
-  when: ssh.enable_sshd is defined and ssh.enable_sshd == False
 
 - name: Install sshfs
   apt: name=sshfs state=present
