@@ -5,5 +5,5 @@ if [ $? -ne 0 ]; then
     sudo apt-get update
     sudo apt-get install python3-pip
 fi
-python3 -m pip install ansible
+sudo python3 -m pip install --user ansible
 ansible-playbook playbooks/main.yml --check
