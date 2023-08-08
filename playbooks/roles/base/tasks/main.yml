@@ -1,7 +1,7 @@
 ---
+- include: packages.yml
 - include: user.yml
 - include: fonts.yml
 - include: shell.yml
 - include: sudo.yml
-- include: packages.yml
 - include: journal.yml
