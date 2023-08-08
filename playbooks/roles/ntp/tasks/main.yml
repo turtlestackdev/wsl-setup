@@ -1,0 +1,11 @@
+---
+- name: Install chrony
+  apt: name=chrony state=present
+
+- name: Push chrony configuration file
+  copy: src=chrony.conf dest=/etc/chrony.conf
+  notify:
+    - restart chrony
+
+- name: Enable and start chrony
+  service: name=chrony enabled=yes state=started

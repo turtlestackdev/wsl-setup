@@ -1,0 +1,51 @@
+- name: Install Bash
+  apt:
+    name:
+      - bash
+      - bash-completion
+    state: present
+  tags:
+    - shell
+
+- name: Install ZSH
+  apt:
+    name:
+      - zsh
+    state: present
+  tags:
+    - shell
+
+
+- name: "Download and unarchive Starship"
+  unarchive:
+    src: https://github.com/starship/starship/releases/download/v1.16.0/starship-x86_64-unknown-linux-gnu.tar.gz
+    remote_src: true
+    dest: /usr/bin/starship
+    mode: 0755
+    owner: root
+  become: true
+
+
+- name: clone oh-my-zsh for users
+  tags:
+    # Suppress warning: [ANSIBLE0006] git used in place of git module
+    # Git module doesn't allow us to set `core.autocrlf=input`.
+    - skip_ansible_lint
+  become: yes
+  become_user: "{{ user.name }}"
+  # core.autocrlf=input prevents https://github.com/robbyrussell/oh-my-zsh/issues/4402
+  command: 'git clone -c core.autocrlf=input --depth=1 https://github.com/robbyrussell/oh-my-zsh.git .oh-my-zsh'
+  args:
+    chdir: /home/{{ user.name }}/
+    creates: /home/{{ user.name }}/.oh-my-zsh
+
+- name: set permissions of oh-my-zsh for users
+  become: yes
+  become_user: "{{ user.name }}"
+  file:
+    path: /home/{{ user.name }}/.oh-my-zsh
+    # Prevent the cloned repository from having insecure permissions. Failing to do
+    # so causes compinit() calls to fail with "command not found: compdef" errors
+    # for users with insecure umasks (e.g., "002", allowing group writability).
+    mode: 'go-w'
+    recurse: yes

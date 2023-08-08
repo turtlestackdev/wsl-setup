@@ -1,0 +1,20 @@
+---
+- name: create fonts directory
+  file:
+    path: "/home/{{ user.name }}/.fonts"
+    state: directory
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+    mode: 0750
+
+- name: font exists
+  shell: "ls /home/{{ user.name }}/.fonts/JetBrainsMono*"
+  register: font_exists
+  ignore_errors: yes
+
+- name: download font
+  when: font_exists is failed
+  ansible.builtin.unarchive:
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip
+    dest: "/home/{{ user.name }}/.fonts"
+    remote_src: yes

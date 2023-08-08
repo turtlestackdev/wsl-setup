@@ -1,0 +1,20 @@
+---
+- name: Install editors
+  apt:
+    name: "{{ editors }}"
+    state: present
+
+- name: Install Python NVIM
+  apt:
+    name: python3-pynvim
+    state: present
+  when: '"neovim" in editors'
+  
+- name: Install Pip NeoVim Plugin
+  pip:
+      name: neovim
+  when: '"neovim" in editors'
+
+- name: Install NeoVim Plugins
+  shell: nvim +'PlugInstall --sync' +qa
+  when: '"neovim" in editors'

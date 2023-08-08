@@ -1,0 +1,65 @@
+---
+user:
+  name: {{ lookup('env', 'USER') }}
+  uid: 1000
+  group: {{ lookup('env', 'USER') }}
+  shell: /usr/bin/zsh
+  log:
+    dir: log
+    rotate: 8
+
+ssh:
+  port: 22
+  user_key: /root/id_rsa
+  enable_sshd: True
+
+gnupg:
+  enable_agent: True
+  emulate_ssh: True
+
+editors:
+  - neovim
+
+base_packages:
+  - dmidecode
+  - tmux
+  - git
+  - rsync
+  - glances
+  - coreutils
+  - moreutils
+  - dateutils
+  - ranger
+  - lsof
+  - sysstat
+  - python-is-python3
+  - python-keyring
+  - python3-secretstorage
+  - tig
+  - ruby
+  - pv
+  - jq
+  - screen
+  - fzf
+  - tree
+  - zip
+  - unzip
+  - wget
+  - dos2unix
+  - pass
+  - mysql-client
+  - postgresql-client
+  - openjdk-11-jdk
+  - openjdk-11-jre
+  - pkg-config
+
+filesystem_packages:
+  - dosfstools
+  - ntfs-3g
+  - exfat-utils
+
+passwordless_sudo:
+  - /usr/bin/openvpn*
+
+journal:
+  max_size: 500M

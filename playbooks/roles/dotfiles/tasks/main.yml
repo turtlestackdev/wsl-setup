@@ -1,0 +1,30 @@
+---
+- name: Install stow
+  apt: name=stow state=present
+  when: dotfiles is defined
+
+- name: create dotfiles directory
+  file:
+    path: /home/{{ user.name }}/dotfiles
+    state: directory
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+    mode: 0750
+
+- name: copy all files
+  copy:
+    src: "{{ item }}"
+    dest: /home/{{ user.name }}/dotfiles
+  with_fileglob: "files/*"
+
+- name: Install user dotfiles
+  shell: |
+      for i in *; do
+         if [[ -d $i ]]; then stow $i; fi;
+      done
+  when: dotfiles is defined
+  become: yes
+  become_user: "{{ user.name }}"
+  args:
+    executable: /bin/bash
+    chdir: /home/{{ user.name }}/dotfiles

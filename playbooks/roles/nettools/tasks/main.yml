@@ -1,0 +1,54 @@
+---
+- name: Install OpenVPN
+  apt: name=openvpn state=present
+
+- name: Install MTR
+  apt: name=mtr state=present
+
+- name: Install net-tools
+  apt: name=net-tools state=present
+
+- name: Install bind-tools
+  apt: name=dnsutils state=present
+
+- name: Install whois
+  apt: name=whois state=present
+
+- name: Install netcat
+  apt: name=netcat state=present
+
+- name: Install lftp
+  apt: name=lftp state=present
+
+- name: Install nmap
+  apt: name=nmap state=present
+
+- name: Install tcpdump
+  apt: name=tcpdump state=present
+
+- name: Install sshuttle
+  apt: name=sshuttle state=present
+
+- name: Install wireshark
+  apt: name=wireshark-qt state=present
+
+
+
+- name: Install socat
+  apt: name=socat state=present
+
+- name: Install nethogs
+  apt: name=nethogs state=present
+
+- name: Install bmon
+  apt: name=bmon state=present
+
+- name: Install speedtest-cli
+  apt: name=speedtest-cli state=present
+
+- name: Install wireguard and kernel modules
+  apt:
+    name:
+      - wireguard-tools
+      - wireguard-dkms
+    state: present

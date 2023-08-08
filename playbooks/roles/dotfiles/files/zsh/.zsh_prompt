@@ -1,0 +1,118 @@
+# Colors of term
+export TERM='screen-256color-bce'
+
+autoload -U colors && colors
+autoload -Uz vcs_info
+
+local reset white gray green red yellow blue cyan
+reset="%{${reset_color}%}"
+white="%{$fg[white]%}"
+gray="%{$fg_bold[gray]%}"
+green="%{$fg_bold[green]%}"
+red="%{$fg[red]%}"
+yellow="%{$fg[yellow]%}"
+blue="%{$fg_bold[blue]%}"
+cyan="%{$fg[cyan]%}"
+
+# Set up VCS_INFO
+#zstyle ':vcs_info:*' enable git hg bzr svn
+zstyle ':vcs_info:*' branchformat "%b-%r"
+zstyle ':vcs_info:*' formats "[%s:%r:%6.6i] %u%c %b"
+zstyle ':vcs_info:*' actionformats " [%a|%b]%u%c-(%r:%s)"
+
+zstyle ':vcs_info:(hg*|git*):*' get-revision true
+zstyle ':vcs_info:(hg*|git*):*' check-for-changes true
+
+zstyle ':vcs_info:git*' formats "[%s:%r:%6.6i] %u%c %b%m"
+zstyle ':vcs_info:git*' actionformats "(%s|${white}%a${gray}) %12.12i %c%u %b%m"
+
+zstyle ':vcs_info:git*:*' stagedstr "${green}S${gray}"
+zstyle ':vcs_info:git*:*' unstagedstr "${red}U${gray}"
+
+# zstyle ':vcs_info:*+*:*' debug true
+
+zstyle ':vcs_info:git*+set-message:*' hooks git-st git-stash
+
+# Show remote ref name and number of commits ahead-of or behind
+function +vi-git-st() {
+    local ahead behind remote
+    local -a gitstatus
+
+    # Are we on a remote-tracking branch?
+    remote=${$(git rev-parse --verify ${hook_com[branch]}@{upstream} \
+        --symbolic-full-name --abbrev-ref 2>/dev/null)}
+
+    if [[ -n ${remote} ]] ; then
+        # for git prior to 1.7
+        # ahead=$(git rev-list origin/${hook_com[branch]}..HEAD | wc -l)
+        ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
+        (( $ahead )) && gitstatus+=( "${green}+${ahead}${gray}" )
+
+        # for git prior to 1.7
+        # behind=$(git rev-list HEAD..origin/${hook_com[branch]} | wc -l)
+        behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
+        (( $behind )) && gitstatus+=( "${red}-${behind}${gray}" )
+
+        hook_com[branch]="${hook_com[branch]} [${remote} ${(j:/:)gitstatus}]"
+    fi
+}
+
+# Show count of stashed changes
+function +vi-git-stash() {
+    local -a stashes
+
+    if [[ -s ${hook_com[base]}/.git/refs/stash ]] ; then
+        stashes=$(git stash list 2>/dev/null | wc -l)
+        hook_com[misc]+=" (${stashes} stashed)"
+    fi
+}
+
+# Use %_ to show why you are in a continued prompt
+ PROMPT2="%F{blue}%_> %F{reset}"
+
+# Executed before each prompt
+function precmd {
+    vcs_info
+    setprompt
+    venv_rprompt
+}
+
+
+local newline
+newline="
+"
+
+function setprompt() {
+    local -a pa
+
+		### Check vsc_info_msg
+		[[ -n ${vcs_info_msg_0_} ]] && psvar[1]=true || psvar[1]=""
+		### if empty, equal to: gray, reset
+		PS1="${gray}${vcs_info_msg_0_}${reset}"
+		### if not empty, append newline
+		PS1+="%(1V.${newline}.)"
+
+		### Display number of jobs
+    PS1+="%(1j.${gray}%j${reset} .)"
+		### White % if last command exit status was 0
+		PS1+="%(0?.${white}.${red})%#${reset}"
+
+		PS1+=":"
+
+    ### Current dir; show in yellow if not writable
+    [[ -w $PWD ]] && PS1+=${green} || PS1+=${blue}
+		PS1+="%~${reset} "
+
+}
+
+venv_rprompt () {
+		RPROMPT=""
+    if [[ -n $VIRTUAL_ENV ]]; then
+        RPROMPT+="${white} venv:$(basename $VIRTUAL_ENV)${reset}"
+    fi
+		RPROMPT+="%F${white}%* %F${blue}%n${cyan}"
+		[[ -n $SSH_CLIENT ]] && RPROMPT+="@%U%m%u"
+		RPROMPT+="%f"
+}
+
+# vim:fdm=indent

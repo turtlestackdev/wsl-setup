@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  become: yes
+  roles:
+    - { role: base, tags: ['base'] }
+    - { role: ssh, tags: ['ssh'] }
+    - { role: dotfiles, tags: ['dotfiles'] }
+    - { role: editors, tags: ['editors'] }
+    - { role: nettools, tags: ['nettools'] }
+    - { role: ntp, tags: ['ntp'] }
+  vars_prompt:
+    - name: user_name
+      prompt: "Enter your first and last name"
+      private: false
+
+    - name: user_email
+      prompt: "Enter your email address"
+      private: false

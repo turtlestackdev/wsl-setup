@@ -1,0 +1,24 @@
+# ssh agent -- for shared home directory across hosts
+SSH_ENV=$HOME/.ssh/.environment.`hostname`
+function start_agent {
+  echo "Starting a new ssh-agent on this host"
+  ssh-agent | sed 's/^echo/#echo/' > ${SSH_ENV}
+  chmod 600 ${SSH_ENV}
+  source ${SSH_ENV} > /dev/null
+  ssh-add;
+  echo succeeded
+}
+
+## ssh-agent
+if [ -e "$SSH_AUTH_SOCK" ]; then
+  echo "Using ${SSH_AUTH_SOCK}"
+elif [ -f "${SSH_ENV}" ]; then
+  echo "Using ${SSH_ENV}"
+  source ${SSH_ENV} > /dev/null
+  ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+    echo "${SSH_ENV} agent is no longer running"
+    start_agent;
+  }
+else
+  start_agent;
+fi

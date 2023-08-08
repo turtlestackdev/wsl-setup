@@ -1,0 +1,7 @@
+---
+- name: Install universal base packages
+  apt:
+      name: "{{ base_packages }}"
+      state: present
+  tags:
+    - packages

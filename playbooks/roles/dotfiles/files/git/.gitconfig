@@ -1,0 +1,12 @@
+[user]
+    name = {{ user_name }}
+    email = {{ user_email }}
+[core]
+    autocrlf = input
+    excludesfile = ~/.gitignore_global
+[rerere]
+	enabled = true
+[push]
+	default = simple
+[init]
+	defaultBranch = master
