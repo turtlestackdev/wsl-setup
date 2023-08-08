@@ -13,9 +13,18 @@
 
 - name: copy all files
   copy:
-    src: "{{ item }}"
-    dest: /home/{{ user.name }}/dotfiles
-  with_fileglob: "files/*"
+    src: dots/
+    dest: /home/{{ user.name }}/dotfiles/
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+
+- name: add git config
+  template:
+    template:
+    src: .gitconfig.j2
+    dest: /home/{{ user.name }}/dotfiles/git/.gitconfig
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
 
 - name: Install user dotfiles
   shell: |
