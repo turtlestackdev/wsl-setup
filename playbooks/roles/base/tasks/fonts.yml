@@ -18,11 +18,3 @@
     src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip
     dest: "/usr/share/fonts/truetype/jetbrains"
     remote_src: yes
-
-- name: update local font config
-  copy:
-    src: 51-local.conf
-    dest: /etc/fonts/conf.d/51-local.conf
-    owner: root
-    group: root
-    mode: 0777
