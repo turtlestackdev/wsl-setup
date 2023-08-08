@@ -30,7 +30,6 @@
       for i in *; do
          if [[ -d $i ]]; then stow $i; fi;
       done
-  when: dotfiles is defined
   become: yes
   become_user: "{{ user.name }}"
   args:
