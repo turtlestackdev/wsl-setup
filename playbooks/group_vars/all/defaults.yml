@@ -33,7 +33,7 @@ base_packages:
   - lsof
   - sysstat
   - python-is-python3
-  - python-keyring
+  - python3-keyring
   - python3-secretstorage
   - tig
   - ruby
