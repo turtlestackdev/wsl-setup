@@ -5,3 +5,14 @@
       state: present
   tags:
     - packages
+
+- name: clone asdf
+  git:
+    repo: https://github.com/asdf-vm/asdf.git
+    dest: "/home/{{ user.name }}/.asdf"
+    version: v0.12.0
+    accept_hostkey: yes
+    update: no
+  become: yes
+  become_user: "{{ user.name }}"
+

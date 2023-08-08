@@ -52,7 +52,7 @@ base_packages:
   - openjdk-11-jdk
   - openjdk-11-jre
   - pkg-config
-  - asdf
+  - curl
 
 filesystem_packages:
   - dosfstools
