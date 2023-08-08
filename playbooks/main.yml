@@ -8,7 +8,7 @@
     - { role: editors, tags: ['editors'] }
     - { role: nettools, tags: ['nettools'] }
     - { role: ntp, tags: ['ntp'] }
-    - { sudo: ntp, tags: ['sudo'] }
+    - { role: sudo, tags: ['sudo'] }
   vars_prompt:
     - name: user_name
       prompt: "Enter your first and last name"
