@@ -20,7 +20,6 @@
 
 - name: add git config
   template:
-    template:
     src: .gitconfig.j2
     dest: /home/{{ user.name }}/dotfiles/git/.gitconfig
     owner: "{{ user.name }}"
