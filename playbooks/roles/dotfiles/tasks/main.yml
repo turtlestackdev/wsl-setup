@@ -1,7 +1,6 @@
 ---
 - name: Install stow
   apt: name=stow state=present
-  when: dotfiles is defined
 
 - name: create dotfiles directory
   file:
