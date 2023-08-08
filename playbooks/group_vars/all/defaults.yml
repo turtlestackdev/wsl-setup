@@ -1,8 +1,8 @@
 ---
 user:
-  name: {{ lookup('env', 'USER') }}
+  name: "{{ lookup('env', 'USER') }}"
   uid: 1000
-  group: {{ lookup('env', 'USER') }}
+  group: "{{ lookup('env', 'USER') }}"
   shell: /usr/bin/zsh
   log:
     dir: log
