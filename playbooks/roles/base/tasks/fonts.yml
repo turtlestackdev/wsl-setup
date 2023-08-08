@@ -1,14 +1,14 @@
 ---
 - name: create fonts directory
   file:
-    path: "/home/{{ user.name }}/.fonts"
+    path: "/usr/share/fonts/truetype/jetbrains"
     state: directory
-    owner: "{{ user.name }}"
-    group: "{{ user.group }}"
-    mode: 0750
+    owner: root
+    group: root
+    mode: 0755
 
 - name: font exists
-  shell: "ls /home/{{ user.name }}/.fonts/JetBrainsMono*"
+  shell: "ls /usr/share/fonts/truetype/jetbrains/JetBrainsMono*"
   register: font_exists
   ignore_errors: yes
 
@@ -16,5 +16,13 @@
   when: font_exists is failed
   ansible.builtin.unarchive:
     src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip
-    dest: "/home/{{ user.name }}/.fonts"
+    dest: "/usr/share/fonts/truetype/jetbrains"
     remote_src: yes
+
+- name: update local font config
+  copy:
+    src: 51-local.conf
+    dest: /etc/fonts/conf.d/51-local.conf
+    owner: root
+    group: roo
+    mode: 0777
