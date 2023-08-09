@@ -53,6 +53,7 @@ base_packages:
   - openjdk-11-jre
   - pkg-config
   - curl
+  - libpq-dev
 
 filesystem_packages:
   - dosfstools
